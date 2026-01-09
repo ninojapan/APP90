@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'sh90-v6';
+const CACHE_NAME = 'sh90-v8';
 const ASSETS = [
   './',
   './index.html',
@@ -8,7 +8,6 @@ const ASSETS = [
   './App.tsx',
   './constants.tsx',
   './types.ts',
-  './wrangler.jsonc',
   'https://cdn.tailwindcss.com',
   'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@700;800&display=swap',
   'https://esm.sh/react@^19.2.3',
@@ -43,7 +42,6 @@ self.addEventListener('activate', (event) => {
 
 // Strategia: Cache First, poi Network
 self.addEventListener('fetch', (event) => {
-  // Ignora richieste non-GET (es. analytics se ci fossero)
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
@@ -53,8 +51,7 @@ self.addEventListener('fetch', (event) => {
       }
 
       return fetch(event.request).then((networkResponse) => {
-        // Metti in cache nuove richieste (es. font aggiuntivi o versioni specifiche di librerie)
-        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+        if (networkResponse && networkResponse.status === 200) {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache);
@@ -62,7 +59,6 @@ self.addEventListener('fetch', (event) => {
         }
         return networkResponse;
       }).catch(() => {
-        // Se siamo completamente offline e la risorsa non è in cache
         if (event.request.mode === 'navigate') {
           return caches.match('./index.html');
         }
