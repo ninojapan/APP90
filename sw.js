@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'sh90-v8';
+const CACHE_NAME = 'sh90-v12';
 const ASSETS = [
   './',
   './index.html',
@@ -8,6 +8,7 @@ const ASSETS = [
   './App.tsx',
   './constants.tsx',
   './types.ts',
+  './wrangler.jsonc',
   'https://cdn.tailwindcss.com',
   'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@700;800&display=swap',
   'https://esm.sh/react@^19.2.3',
@@ -17,18 +18,16 @@ const ASSETS = [
   'https://cdn-icons-png.flaticon.com/512/5776/5776424.png'
 ];
 
-// Installa e metti in cache tutto subito
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('SH-90 Cache Opening...');
+      console.log('SH-90 Cache Opening (v12)...');
       return cache.addAll(ASSETS);
     })
   );
 });
 
-// Pulisci vecchie cache all'attivazione
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -40,7 +39,6 @@ self.addEventListener('activate', (event) => {
   return self.clients.claim();
 });
 
-// Strategia: Cache First, poi Network
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
