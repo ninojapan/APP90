@@ -2,5 +2,8 @@
   // Cloudflare Pages configuration for SH-90 Limits PWA
   "name": "app90",
   "compatibility_date": "2024-01-01",
-  "pages_build_output_dir": "dist"
+  "pages_build_output_dir": "dist",
+  "build": {
+    "command": "npm run build"
+  }
 }
