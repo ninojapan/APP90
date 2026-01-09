@@ -1,5 +1,4 @@
-
-const CACHE_NAME = 'sh90-v12';
+const CACHE_NAME = 'sh90-v15';
 const ASSETS = [
   './',
   './index.html',
@@ -10,19 +9,14 @@ const ASSETS = [
   './types.ts',
   './wrangler.jsonc',
   'https://cdn.tailwindcss.com',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@700;800&display=swap',
-  'https://esm.sh/react@^19.2.3',
-  'https://esm.sh/react-dom@^19.2.3',
-  'https://esm.sh/react@^19.2.3/',
-  'https://esm.sh/react-dom@^19.2.3/',
-  'https://cdn-icons-png.flaticon.com/512/5776/5776424.png'
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@700;800&display=swap'
 ];
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('SH-90 Cache Opening (v12)...');
+      console.log('SH-90 Cache Opening (v15)...');
       return cache.addAll(ASSETS);
     })
   );
@@ -41,22 +35,9 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
-
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-
-      return fetch(event.request).then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200) {
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-        }
-        return networkResponse;
-      }).catch(() => {
+    caches.match(event.request).then((cached) => {
+      return cached || fetch(event.request).catch(() => {
         if (event.request.mode === 'navigate') {
           return caches.match('./index.html');
         }
