@@ -1,0 +1,5 @@
+{
+  "name": "SH-90 Limits",
+  "description": "A professional-grade, dark-themed dashboard for visualizing SH-90 helicopter flight limitations, specifically focusing on Torque (TQ) across various flight envelopes.",
+  "requestFramePermissions": []
+}
