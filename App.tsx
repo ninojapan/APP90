@@ -285,11 +285,6 @@ const App: React.FC = () => {
         {state.category && !state.subCategory && renderSubMenu()}
         {state.category && state.subCategory && renderLimits()}
       </main>
-
-      <footer className="mt-4 py-6 border-t border-white/5 flex flex-col items-center gap-1 opacity-40 shrink-0">
-        <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.5em] italic">Digital Flight Handbook</span>
-        <span className="text-[7px] font-bold text-slate-600 uppercase">Version 2.0.1 - Restricted Access</span>
-      </footer>
     </div>
   );
 };
