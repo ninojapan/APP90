@@ -1,5 +1,5 @@
-const CACHE_NAME = 'sh90-v19';
-const STATIC_CACHE = 'sh90-static-v19';
+const CACHE_NAME = 'sh90-v20';
+const STATIC_CACHE = 'sh90-static-v20';
 
 // Essential URLs to cache immediately
 const PRECACHE_URLS = [
