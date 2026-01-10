@@ -1,16 +1,19 @@
-const CACHE_NAME = 'sh90-v24';
-const STATIC_CACHE = 'sh90-static-v24';
+const CACHE_NAME = 'sh90-v25';
+const STATIC_CACHE = 'sh90-static-v25';
 
 // Essential URLs to cache immediately
 const PRECACHE_URLS = [
   '/',
   '/index.html',
+  '/icon-192.png',
+  '/icon-256.png',
+  '/icon-384.png',
   '/icon-512.png'
 ];
 
 // Install - precache ALL necessary files
 self.addEventListener('install', (event) => {
-  console.log('SH-90 Service Worker v24 installing...');
+  console.log('SH-90 Service Worker v25 installing...');
   event.waitUntil(
     Promise.all([
       // Cache static assets
@@ -67,7 +70,7 @@ self.addEventListener('install', (event) => {
 
 // Activate - cleanup old caches
 self.addEventListener('activate', (event) => {
-  console.log('SH-90 Service Worker v24 activating...');
+  console.log('SH-90 Service Worker v25 activating...');
   event.waitUntil(
     caches.keys()
       .then((keys) => {
