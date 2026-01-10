@@ -125,6 +125,7 @@ export const WIND_ROPE_DATA: LimitValue[] = [
 export const GROUNDSPEED_DATA: LimitValue[] = [
   { label: 'Run Takeoff / Landing', value: 50, unit: 'kt', color: 'text-emerald-400', note: 'Max GS' },
   { label: 'Max Braking Speed', value: 35, unit: 'kt', color: 'text-amber-500' },
+  { label: 'Max Taxi in Steering', value: 10, unit: 'kt', color: 'text-cyan-400' },
 ];
 
 export const VNE_MASS_DATA: LimitValue[] = [
