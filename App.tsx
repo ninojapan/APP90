@@ -213,20 +213,20 @@ const App: React.FC = () => {
           </div>
         )}
 
-        <div className="grid gap-4">
+        <div className="grid gap-3">
           {activeLimits.map((limit, idx) => (
-            <div key={idx} className="relative overflow-hidden p-8 rounded-[3rem] border border-white/5 bg-slate-900/30 backdrop-blur-2xl flex items-center justify-between group shadow-2xl">
-              <div className={`absolute left-0 top-0 bottom-0 w-2.5 ${limit.color.replace('text', 'bg')} opacity-100 shadow-[0_0_20px_rgba(0,0,0,0.5)]`}></div>
-              <div className="flex flex-col flex-1 pl-4">
+            <div key={idx} className="relative overflow-hidden p-5 rounded-[2.5rem] border border-white/5 bg-slate-900/30 backdrop-blur-2xl flex items-center justify-between group shadow-2xl">
+              <div className={`absolute left-0 top-0 bottom-0 w-2 ${limit.color.replace('text', 'bg')} opacity-100 shadow-[0_0_20px_rgba(0,0,0,0.5)]`}></div>
+              <div className="flex flex-col flex-1 pl-3">
                 <div className="flex items-center gap-3">
                   <span className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em]">{limit.duration || 'LIMIT'}</span>
                   {limit.note && <span className="text-[9px] font-black uppercase tracking-wider bg-white/5 px-3 py-1 rounded-full border border-white/10 text-slate-300">{limit.note}</span>}
                 </div>
-                <span className="text-white font-black text-2xl leading-none mt-2 tracking-tight uppercase italic">{limit.label}</span>
+                <span className="text-white font-bold text-sm leading-tight mt-2 tracking-tight uppercase">{limit.label}</span>
               </div>
-              <div className="flex items-baseline gap-1.5 bg-black/40 px-6 py-4 rounded-[2.5rem] border border-white/5 shadow-inner">
-                <span className={`text-5xl font-black font-mono tracking-tighter ${limit.color}`}>{limit.value}</span>
-                <span className={`text-xl font-black font-mono opacity-40 ${limit.color}`}>{limit.unit || ''}</span>
+              <div className="flex items-baseline gap-1 bg-black/40 px-4 py-3 rounded-[2rem] border border-white/5 shadow-inner">
+                <span className={`text-2xl font-black font-mono tracking-tight ${limit.color}`}>{limit.value}</span>
+                <span className={`text-sm font-bold font-mono opacity-50 ${limit.color}`}>{limit.unit || ''}</span>
               </div>
             </div>
           ))}

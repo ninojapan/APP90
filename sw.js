@@ -1,47 +1,57 @@
-const CACHE_NAME = 'sh90-v16';
-const ASSETS = [
-  './',
-  './index.html',
-  './manifest.json',
-  './index.tsx',
-  './App.tsx',
-  './constants.tsx',
-  './types.ts',
-  './wrangler.jsonc',
-  'https://cdn.tailwindcss.com',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@700;800&display=swap'
-];
+const CACHE_NAME = 'sh90-v17';
 
+// Install - activate immediately
 self.addEventListener('install', (event) => {
+  console.log('SH-90 Service Worker v17 installing...');
   self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('SH-90 Cache Opening (v16)...');
-      return cache.addAll(ASSETS);
-    })
-  );
 });
 
+// Activate - take control immediately
 self.addEventListener('activate', (event) => {
+  console.log('SH-90 Service Worker v17 activating...');
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
-        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+        keys.filter(key => key !== CACHE_NAME).map(key => {
+          console.log('Deleting old cache:', key);
+          return caches.delete(key);
+        })
       );
     })
   );
   return self.clients.claim();
 });
 
+// Fetch - Network first, cache fallback
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      return cached || fetch(event.request).catch(() => {
-        if (event.request.mode === 'navigate') {
-          return caches.match('./index.html');
-        }
-      });
+    caches.open(CACHE_NAME).then((cache) => {
+      return fetch(event.request)
+        .then((response) => {
+          // Cache successful responses
+          if (response.ok) {
+            cache.put(event.request, response.clone());
+          }
+          return response;
+        })
+        .catch(() => {
+          // Fallback to cache when offline
+          return cache.match(event.request).then((cached) => {
+            if (cached) {
+              console.log('Serving from cache:', event.request.url);
+              return cached;
+            }
+            // For navigation requests, return index.html
+            if (event.request.mode === 'navigate') {
+              return cache.match('/index.html').then((indexCached) => {
+                return indexCached || cache.match('./index.html');
+              });
+            }
+            throw new Error('No cache available');
+          });
+        });
     })
   );
 });
