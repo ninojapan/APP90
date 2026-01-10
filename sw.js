@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sh90-v15';
+const CACHE_NAME = 'sh90-v16';
 const ASSETS = [
   './',
   './index.html',
@@ -16,7 +16,7 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('SH-90 Cache Opening (v15)...');
+      console.log('SH-90 Cache Opening (v16)...');
       return cache.addAll(ASSETS);
     })
   );
