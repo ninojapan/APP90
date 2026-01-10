@@ -11,7 +11,7 @@ import {
   CATEGORIES, ENGINES_SUB, HYDRAULICS_SUB, MGB_SUB, SPEED_SUB, WIND_SUB, NOTES_SUB, CHECKLIST_SUB,
   WARNING_NOTES_TQ, WARNING_NOTES_APU, WARNING_NOTES_HYD,
   WARNING_NOTES_STARTING_OIL, WARNING_NOTES_SHUTDOWN,
-  ENGINE_RINSE_PROCEDURE
+  ENGINE_RINSE_PROCEDURE, ENGINE_RINSE_NOTES, ENGINE_RINSE_CAUTIONS
 } from './constants.tsx';
 
 const App: React.FC = () => {
@@ -151,6 +151,28 @@ const App: React.FC = () => {
               <div key={i} className="p-6 bg-slate-900/60 border border-white/5 rounded-[2.5rem] flex gap-5 items-start shadow-2xl backdrop-blur-xl">
                 <span className="w-8 h-8 rounded-2xl bg-orange-600/10 flex items-center justify-center text-[13px] font-black text-orange-500 shrink-0 mt-0.5 border border-orange-500/20 shadow-inner">{i+1}</span>
                 <p className="text-[15px] font-bold text-slate-200 leading-relaxed whitespace-pre-line tracking-tight">{step}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-4 mt-8">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-400 ml-1">Notes</h3>
+            {ENGINE_RINSE_NOTES.map((note, i) => (
+              <div key={i} className="p-6 bg-slate-900/80 border border-white/5 rounded-[2.5rem] flex gap-5 items-start shadow-2xl backdrop-blur-3xl relative overflow-hidden">
+                <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-blue-400"></div>
+                <svg className="w-7 h-7 text-blue-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <p className="text-[15px] font-bold text-slate-200 leading-relaxed">{note}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-4 mt-8">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-red-400 ml-1">Cautions</h3>
+            {ENGINE_RINSE_CAUTIONS.map((caution, i) => (
+              <div key={i} className="p-6 bg-slate-900/80 border border-white/5 rounded-[2.5rem] flex gap-5 items-start shadow-2xl backdrop-blur-3xl relative overflow-hidden">
+                <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-red-500"></div>
+                <svg className="w-7 h-7 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                <p className="text-[15px] font-bold text-slate-200 leading-relaxed">{caution}</p>
               </div>
             ))}
           </div>
