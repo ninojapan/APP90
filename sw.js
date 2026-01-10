@@ -1,16 +1,17 @@
-const CACHE_NAME = 'sh90-v22';
-const STATIC_CACHE = 'sh90-static-v22';
+const CACHE_NAME = 'sh90-v23';
+const STATIC_CACHE = 'sh90-static-v23';
 
 // Essential URLs to cache immediately
 const PRECACHE_URLS = [
   '/',
   '/index.html',
-  '/manifest.json'
+  '/manifest.json',
+  '/icon-512.png'
 ];
 
 // Install - precache ALL necessary files
 self.addEventListener('install', (event) => {
-  console.log('SH-90 Service Worker v22 installing...');
+  console.log('SH-90 Service Worker v23 installing...');
   event.waitUntil(
     Promise.all([
       // Cache static assets
@@ -26,6 +27,7 @@ self.addEventListener('install', (event) => {
         const scriptMatches = indexText.matchAll(/src="([^"]+)"/g);
         const cssMatches = indexText.matchAll(/href="([^"]+\.css)"/g);
         const jsonMatches = indexText.matchAll(/href="([^"]+\.json)"/g);
+        const pngMatches = indexText.matchAll(/href="([^"]+\.png)"/g);
 
         const assetUrls = [];
         for (const match of scriptMatches) {
@@ -35,6 +37,9 @@ self.addEventListener('install', (event) => {
           assetUrls.push(match[1]);
         }
         for (const match of jsonMatches) {
+          assetUrls.push(match[1]);
+        }
+        for (const match of pngMatches) {
           assetUrls.push(match[1]);
         }
 
@@ -63,7 +68,7 @@ self.addEventListener('install', (event) => {
 
 // Activate - cleanup old caches
 self.addEventListener('activate', (event) => {
-  console.log('SH-90 Service Worker v22 activating...');
+  console.log('SH-90 Service Worker v23 activating...');
   event.waitUntil(
     caches.keys()
       .then((keys) => {
