@@ -1,18 +1,16 @@
-const CACHE_NAME = 'sh90-v20';
-const STATIC_CACHE = 'sh90-static-v20';
+const CACHE_NAME = 'sh90-v21';
+const STATIC_CACHE = 'sh90-static-v21';
 
 // Essential URLs to cache immediately
 const PRECACHE_URLS = [
   '/',
   '/index.html',
-  '/manifest.json',
-  'https://cdn.tailwindcss.com',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@700;800&display=swap'
+  '/manifest.json'
 ];
 
 // Install - precache ALL necessary files
 self.addEventListener('install', (event) => {
-  console.log('SH-90 Service Worker v19 installing...');
+  console.log('SH-90 Service Worker v21 installing...');
   event.waitUntil(
     Promise.all([
       // Cache static assets
@@ -61,7 +59,7 @@ self.addEventListener('install', (event) => {
 
 // Activate - cleanup old caches
 self.addEventListener('activate', (event) => {
-  console.log('SH-90 Service Worker v19 activating...');
+  console.log('SH-90 Service Worker v21 activating...');
   event.waitUntil(
     caches.keys()
       .then((keys) => {
