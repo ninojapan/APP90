@@ -246,7 +246,7 @@ const App: React.FC = () => {
                 </div>
                 <span className="text-white font-bold text-sm leading-tight mt-2 tracking-tight uppercase">{limit.label}</span>
               </div>
-              <div className="flex items-baseline gap-1 bg-black/40 px-4 py-3 rounded-[2rem] border border-white/5 shadow-inner">
+              <div className="flex items-baseline gap-1 bg-black/40 px-4 py-3 rounded-[2rem] border border-white/5 shadow-inner whitespace-nowrap">
                 <span className={`text-2xl font-black font-mono tracking-tight ${limit.color}`}>{limit.value}</span>
                 <span className={`text-sm font-bold font-mono opacity-50 ${limit.color}`}>{limit.unit || ''}</span>
               </div>
