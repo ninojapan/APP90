@@ -173,7 +173,7 @@ export const TORQUE_DATA: Record<FlightMode, Record<string, LimitValue[]>> = {
   [FlightMode.AEO]: {
     [SpeedCondition.HIGH]: [
       { label: 'Max Cont. Vi>80', value: 91, unit: '%', color: 'text-emerald-400' },
-      { label: 'Max Trans. Vi>80', value: 104, unit: '%', duration: '20 sec', color: 'text-amber-400' }
+      { label: 'Max Trans. Vi>80', value: 100, unit: '%', duration: '20 sec', color: 'text-amber-400' }
     ],
     [SpeedCondition.LOW]: [
       { label: 'Max Cont. Vi<40', value: 104, unit: '%', color: 'text-emerald-400' },
