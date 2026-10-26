@@ -11,7 +11,7 @@ import {
   CATEGORIES, ENGINES_SUB, HYDRAULICS_SUB, MGB_SUB, SPEED_SUB, WIND_SUB, NOTES_SUB, CHECKLIST_SUB,
   WARNING_NOTES_TQ, WARNING_NOTES_APU, WARNING_NOTES_HYD,
   WARNING_NOTES_STARTING_OIL, WARNING_NOTES_SHUTDOWN,
-  ENGINE_RINSE_PROCEDURE, ENGINE_RINSE_NOTES, ENGINE_RINSE_CAUTIONS
+  ENGINE_RINSE_PROCEDURE, ENGINE_RINSE_NOTES, ENGINE_RINSE_CAUTIONS, CHECKLISTS
 } from './constants.tsx';
 
 const App: React.FC = () => {
@@ -176,6 +176,38 @@ const App: React.FC = () => {
               </div>
             ))}
           </div>
+        </div>
+      );
+    }
+
+    if (state.category === Category.CHECKLIST && state.subCategory && CHECKLISTS[state.subCategory]) {
+      return (
+        <div className="animate-in fade-in slide-in-from-bottom-8 duration-500 space-y-3 pb-20">
+          {CHECKLISTS[state.subCategory].map((e, i) => {
+            if (e.kind === 'heading') {
+              return <h3 key={i} className="text-[10px] font-black uppercase tracking-[0.3em] text-orange-500 ml-1 pt-4">{e.text}</h3>;
+            }
+            if (e.kind === 'note' || e.kind === 'caution') {
+              const isCaution = e.kind === 'caution';
+              return (
+                <div key={i} className="p-5 bg-slate-900/80 border border-white/5 rounded-[2rem] flex gap-4 items-start shadow-2xl backdrop-blur-3xl relative overflow-hidden">
+                  <div className={`absolute top-0 left-0 bottom-0 w-1.5 ${isCaution ? 'bg-red-500' : 'bg-blue-400'}`}></div>
+                  <span className={`text-[10px] font-black uppercase tracking-widest shrink-0 mt-1 ${isCaution ? 'text-red-500' : 'text-blue-400'}`}>{isCaution ? 'Caution' : 'Note'}</span>
+                  <p className="text-[14px] font-bold text-slate-200 leading-relaxed whitespace-pre-line">{e.text}</p>
+                </div>
+              );
+            }
+            const isSub = e.kind === 'sub';
+            return (
+              <div key={i} className={`p-5 bg-slate-900/60 border border-white/5 rounded-[2rem] flex gap-4 items-start shadow-2xl backdrop-blur-xl ${isSub ? 'ml-8' : ''}`}>
+                <span className="w-8 h-8 rounded-2xl bg-orange-600/10 flex items-center justify-center text-[13px] font-black text-orange-500 shrink-0 border border-orange-500/20 shadow-inner">{e.ref}</span>
+                <div className="flex-1">
+                  <p className="text-[15px] font-bold text-slate-200 leading-snug tracking-tight">{e.text}</p>
+                  {e.action && <p className="text-[15px] font-black text-emerald-400 mt-1 uppercase">{e.action}</p>}
+                </div>
+              </div>
+            );
+          })}
         </div>
       );
     }

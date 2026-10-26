@@ -1,4 +1,4 @@
-import { Category, FlightMode, SpeedCondition, PowerMode, LimitValue } from './types';
+import { Category, FlightMode, SpeedCondition, PowerMode, LimitValue, ChecklistEntry } from './types';
 
 export const CATEGORIES = [
   { id: Category.ENGINES, icon: 'engine', label: 'Engines' },
@@ -53,6 +53,10 @@ export const WIND_SUB = [
 
 export const CHECKLIST_SUB = [
   { id: 'CH_ENGINE_RINSE', label: 'Engine Rinse' },
+  { id: 'CH_NORMAL_SHUTDOWN', label: 'Engine Normal Shutdown' },
+  { id: 'CH_ALT_SHUTDOWN', label: 'Alternate Engine Normal Shutdown' },
+  { id: 'CH_ENGINE_STARTING', label: 'Engine Starting - Initial Procedures' },
+  { id: 'CH_ENGINE_VENT', label: 'Engine Vent Procedure' },
 ];
 
 export const NOTES_SUB = [
@@ -98,6 +102,115 @@ export const ENGINE_RINSE_CAUTIONS = [
   "Do not clean or rinse the engine if the air temperature is below -15°C.",
   "Let the T4.5 temperature decrease to 125°C or less before supplying cleaning/rinsing solution."
 ];
+
+// CHECKLIST DATA (step = numbered item, sub = lettered sub-item)
+const h = (text: string): ChecklistEntry => ({ kind: 'heading', text });
+const s = (ref: string, text: string, action?: string): ChecklistEntry => ({ kind: 'step', ref, text, action });
+const a = (ref: string, text: string, action?: string): ChecklistEntry => ({ kind: 'sub', ref, text, action });
+const n = (text: string): ChecklistEntry => ({ kind: 'note', text });
+const c = (text: string): ChecklistEntry => ({ kind: 'caution', text });
+
+const NOTE_EECU_CHANNEL = "Disregard possible that may be momentarily illuminated during EECU channel change from IDLE to STOP.";
+const CAUTION_APU_RESTART = "Once both engines shut down, APU shall not be restarted before complete rotor stop. Risk of RAGB damage.";
+
+export const CHECKLISTS: Record<string, ChecklistEntry[]> = {
+  CH_NORMAL_SHUTDOWN: [
+    n("This procedure can be performed at one engine per time or on both engine at the same time."),
+    n("If for operational reasons the normal shutdown procedure cannot be performed, use the Alternate Engine Normal Shutdown Procedure."),
+    s('1', 'MFD VMD', 'Select'),
+    s('2', 'ECS', 'OFF'),
+    s('3', 'Clock', 'Start'),
+    s('4', '1st ENG', 'Shutdown'),
+    a('a', '1st ENG SIF sw', 'IDLE'),
+    a('b', 'After 2 minutes - 1st ENG SIF sw', 'STOP'),
+    a('c', '1st ENG FUEL sws', 'OFF'),
+    a('d', 'Shutdown time', 'Record (Report on H/C logbook)'),
+    s('5', '2nd ENG SIF sw', 'IDLE'),
+    a('a', 'ELEC CP, ALT1 and 3 pbs', 'OFF'),
+    a('b', 'IF APU not running and AC EPU is available: ALT 2 pbs', 'OFF'),
+    c(CAUTION_APU_RESTART),
+    s('6', '2nd ENG, after 2 minutes at IDLE Shutdown'),
+    a('a', '2nd ENG SIF sw', 'STOP'),
+    a('b', '2nd ENG FUEL sws', 'OFF'),
+    n(NOTE_EECU_CHANNEL),
+    a('c', 'Shutdown time', 'Record (Report on H/C logbook)'),
+    s('7', 'Clock', 'Stop, reset'),
+    s('8', 'ELEC CP, all ALT pbs', 'ON'),
+  ],
+  CH_ALT_SHUTDOWN: [
+    n("This procedure can be performed at one engine per time or on both engine at the same time."),
+    s('1', 'MFD VMD', 'Select'),
+    s('2', 'ECS', 'OFF'),
+    s('3', 'Clock', 'Start'),
+    s('4', 'After 2 min at NG<90%, for both ENG'),
+    s('5', '1st ENG', 'Shutdown'),
+    a('a', '1st ENG SIF sw', 'IDLE'),
+    a('b', 'After 20 s - 1st ENG SIF sw', 'STOP'),
+    a('c', '1st ENG FUEL sws', 'OFF'),
+    a('d', 'Shutdown time', 'Record (Report on H/C logbook)'),
+    n("The vent procedure shall be accomplished within 5 minutes from ENG SIF to STOP."),
+    a('e', 'At 0% Ng (on IEBD)', 'Perform Engine vent'),
+    s('6', '2nd ENG SIF sw', 'IDLE'),
+    a('a', 'ELEC CP, ALT1 and 3 pbs', 'OFF'),
+    a('b', 'IF APU not running and AC EPU is available: ALT2 pb', 'OFF'),
+    c(CAUTION_APU_RESTART),
+    s('7', '2nd ENG, after 20 s at IDLE Shutdown'),
+    a('a', '2nd ENG SIF sw', 'STOP'),
+    a('b', '2nd ENG FUEL sws', 'OFF'),
+    n(NOTE_EECU_CHANNEL),
+    a('c', 'Shutdown time', 'Record (Report on H/C logbook)'),
+    a('d', 'At 0% Ng (on IEBD)', 'Perform Engine vent'),
+    s('8', 'Clock', 'Stop, reset'),
+    s('9', 'ELEC CP, all ALT pbs', 'ON'),
+  ],
+  CH_ENGINE_STARTING: [
+    h('Initial procedures'),
+    c("If an ENG is shut down without been cooled (IDLE for at least 2 min or NG<90% for at least 2 min and IDLE for at least 20 s and Engine vent), it is considered an emergency shutdown."),
+    c("In case of engine shutdown without proper cooling, it is considered an \"emergency shutdown\" condition. After an emergency shutdown it is necessary to restart the ENG within 5 min or to cool down the engine for 4 hours."),
+    c("Following an emergency shutdown, any ventilation procedures (warm eng vent or eng vent) are forbidden in the frame of 5 minutes and within 4 hours after shutdown."),
+    c("Restarting a warm engine after 5 minutes and within 4 hours from an \"emergency shutdown\" may cause a bowed compressor rotor and rubs of airfoils and seals."),
+    c("In case of operational needs, a mandatory/not delayable restart of the engine between 5 minutes and 4 hours following an emergency shutdown is allowed under military responsibility. This shall be recorded in the H/C logbook for successive maintenance actions. If T4>300°C perform an engine vent [DMC JA-A-15-30-50-20A-131A-A] before restart."),
+    c("If fuel is injected into the ENG without a start occurring, purge the engine of the fuel by performing an engine vent (DMC JA-A-15-30-50-20A-131A-A)."),
+    c("During cold weather starting, ENG Oil Press may exceed 13,8 bar. Prior to accelerating the ENG from IDLE to FLT wait for Oil Press < 6,9 bar (max. time > 13,8 bar: 2,5 min). Oil pressure may increase again while accelerating to FLT. Do not apply power until the oil pressure < 6,9 bar."),
+    c("During engine start-up, APU, if running, shall not be stopped before rotor NR > 100%. Risk of RAGB damage."),
+    c("During ENG start-up phase (NR raising), ALTs are connected at 95% NR and then loaded. With ALTs connected, to avoid alternators damages (i.e. load in under speed), operate only if:\n– At least one ENG is in FLIGHT, or\n– The APU is running and ALT1 and ALT3 pb are in OFF position, or\n– The ACEPU is used and ALT1, ALT2 and ALT3 pb are in OFF position."),
+    s('2', 'ECS', 'OFF'),
+    s('3', 'External lighting', 'As req'),
+    s('4', 'VMD', 'Select'),
+    n("COLD engine: shutdown performed more than 4 hours ago.\nWARM engine: normal shutdown performed more than 5 minutes and within 4 hours ago.\nHOT engine: normal shutdown performed less than 5 minutes ago."),
+    s('3', 'IF the Engine is a COLD ENGINE'),
+    a('a', 'Proceed to ENGINE STARTING'),
+    s('3', 'IF the Engine is a WARM ENGINE'),
+    a('a', 'Perform WARM ENG VENT (see Engine Vent Procedure)'),
+    s('4', 'Wait for 30 s before Engine Starting'),
+    c("Repeat warm engine vent procedure if engine start has to occur more than 3 minutes after warm vent completion (NG reaches 0% on IEBD)."),
+    n("The warm engine vent is not necessary if the engine has just completed a washing cycle before start."),
+    s('3', 'IF the Engine is a HOT ENGINE'),
+    a('a', 'Proceed to ENGINE STARTING'),
+    h('First engine start'),
+    s('1', 'IF T4>300°C'),
+    a('a', 'Perform ENG VENT (see Engine Vent Procedure)'),
+    c("Rotor quick start procedure is mandatory for wind > 30 kt or for ship deck operations."),
+  ],
+  CH_ENGINE_VENT: [
+    h('Case: Warm engine vent procedure'),
+    c("Perform the following procedure if the engine has been shutdown from more than 5 minutes and less than 4 hours. If the engine has been shutdown for more than 4 hours (cold engine) or less than 5 minutes (hot engine) do not perform the warm engine vent procedure."),
+    c("Do not exceed starter duty cycle."),
+    s('1', 'CFP, Fuel Pumps', 'OFF'),
+    s('2', 'ENG CRANK pb', 'Press and HOLD till 18%-22% NG'),
+    s('3', 'Wait till NG 0% on IEBD'),
+    h('Case: Engine vent procedure'),
+    n("Perform the following procedure if:\n– No normal T4 rise within 20 s on engine start, or\n– Residual T4 > 300°C after warm engine vent procedure."),
+    c("Do not perform engine vent procedure following an emergency shutdown unless it is within 5 minutes (hot engine) or more than 4 hours (cold engine) since last shutdown."),
+    c("If cranking is used, the starter shall not be reengaged until NG has dropped below 15% or starter clutch may be damaged.\nIf cranking is used, the starter shall not be reengaged until NG has dropped below 10% (on IEBD) or starter clutch may be damaged."),
+    c("Do not exceed starter duty cycle."),
+    s('1', 'CFP, Fuel Pumps', 'OFF'),
+    s('2', 'Wait for 90 s'),
+    s('3', 'NG', '< 10%'),
+    s('4', 'ENG CRANK pb', 'PRESS and hold for 20 s max'),
+    s('5', 'Wait for 30 s before resuming normal starting procedure'),
+  ],
+};
 
 // LIMIT DATA
 export const WIND_START_DATA: LimitValue[] = [

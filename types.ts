@@ -34,6 +34,13 @@ export interface LimitValue {
   note?: string;
 }
 
+export interface ChecklistEntry {
+  kind: 'heading' | 'step' | 'sub' | 'note' | 'caution';
+  text: string;
+  ref?: string;
+  action?: string;
+}
+
 export interface TorqueState {
   category: Category | null;
   subCategory: string | null;
