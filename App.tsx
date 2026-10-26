@@ -130,8 +130,8 @@ const App: React.FC = () => {
               onClick={() => setState(s => ({ ...s, subCategory: sub.id }))}
               className="w-full p-6 bg-slate-900/40 backdrop-blur-md border border-white/5 rounded-3xl flex items-center justify-between active-scale transition-all hover:bg-slate-800 shadow-xl"
             >
-              <span className="text-lg font-black text-white tracking-tight">{sub.label}</span>
-              <div className="w-10 h-10 rounded-2xl bg-slate-800 flex items-center justify-center border border-white/5 shadow-inner">
+              <span className="flex-1 text-left text-lg font-black text-white tracking-tight">{sub.label}</span>
+              <div className="w-10 h-10 shrink-0 ml-3 rounded-2xl bg-slate-800 flex items-center justify-center border border-white/5 shadow-inner">
                 <svg className="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
               </div>
             </button>
